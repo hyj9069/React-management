@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Customer from "./components/Customer";
 import Image1 from "./img/profile(1).jpg";
@@ -7,35 +7,6 @@ import Image3 from "./img/profile(1).jpg";
 import { Paper, Table, TableHead, TableBody, TableCell, TableRow } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-// customers 배열 정의
-const customers = [
-  {
-    id: 1,
-    image: Image1,
-    name: "홍길동",
-    birthday: "980122",
-    gender: "남자",
-    job: "대학생",
-  },
-  {
-    id: 2,
-    image: Image2,
-    name: "이순신",
-    birthday: "960727",
-    gender: "남자",
-    job: "장군",
-  },
-  {
-    id: 3,
-    image: Image3,
-    name: "아따맘마",
-    birthday: "890205",
-    gender: "여자",
-    job: "주부",
-  },
-];
-
-// RootPaper, RootTable 컴포넌트는 여전히 사용 가능합니다.
 const RootPaper = styled(Paper)(({ theme }) => ({
   width: "100%",
   marginTop: theme.spacing(3),
@@ -47,6 +18,25 @@ const RootTable = styled(Table)(() => ({
 }));
 
 function App() {
+  const [customers, setCustomers] = useState([]);
+
+  useEffect(() => {
+    callApi();
+  }, []);
+
+  const callApi = async () => {
+    try {
+      //비동기적으로 접속하고자하는 api주소를 넣기
+      const response = await fetch("/api/customers");
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const body = await response.json(); //json형태로 body변수에 담기
+      setCustomers(body);
+    } catch (error) {
+      console.log("Error fetching data : ", error);
+    }
+  };
   return (
     <RootPaper>
       <RootTable>
@@ -62,12 +52,25 @@ function App() {
         </TableHead>
         <TableBody>
           {customers.map((customer) => (
-            <Customer key={customer.id} id={customer.id} image={customer.image} name={customer.name} birthday={customer.birthday} gender={customer.gender} job={customer.job} />
+            <Customer key={customer.id} id={customer.id} image={getImagePath(customer.id)} name={customer.name} birthday={customer.birthday} gender={customer.gender} job={customer.job} />
           ))}
         </TableBody>
       </RootTable>
     </RootPaper>
   );
+}
+
+function getImagePath(id) {
+  switch (id) {
+    case 1:
+      return Image1;
+    case 2:
+      return Image2;
+    case 3:
+      return Image3;
+    default:
+      return "";
+  }
 }
 
 export default App;
