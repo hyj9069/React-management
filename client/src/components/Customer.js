@@ -2,16 +2,11 @@ import React from "react";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 function Customer({ name, birthday, gender, job, id, image }) {
-  const imgStyle = {
-    width: "100px",
-    height: "100px",
-    borderRadius: "50%",
-  };
   return (
     <TableRow>
       <TableCell>{id}</TableCell>
       <TableCell>
-        <img src={image} alt="profileImg" style={imgStyle}></img>
+        <img src={image} alt="profileImg"></img>
       </TableCell>
       <TableCell>{name}</TableCell>
       <TableCell>{birthday}</TableCell>
