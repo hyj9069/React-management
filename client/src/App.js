@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import Customer from "./components/Customer";
-// import Image1 from "./img/profile(1).jpg";
-// import Image2 from "./img/profile(1).jpg";
-// import Image3 from "./img/profile(1).jpg";
 import { Paper, Table, TableHead, TableBody, TableCell, TableRow } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -76,18 +73,5 @@ function App() {
     </RootPaper>
   );
 }
-
-// function getImagePath(id) {
-//   switch (id) {
-//     case 1:
-//       return Image1;
-//     case 2:
-//       return Image2;
-//     case 3:
-//       return Image3;
-//     default:
-//       return "";
-//   }
-// }
 
 export default App;
