@@ -18,6 +18,10 @@ const connection = mysqld.createConnection({
   database: conf.database,
 });
 connection.connect();
+
+const multer = require("multer");
+const upload = multer({ dest: "./upload" });
+
 app.get("/api/customers", (req, res) => {
   connection.query("SELECT * FROM customer", (err, rows, fields) => {
     if (!err) {
@@ -25,6 +29,24 @@ app.get("/api/customers", (req, res) => {
     } else {
       console.log("err : ", err);
     }
+  });
+});
+
+app.use("/image", express.static("./upload"));
+
+app.post("/api/customers", upload.single("image"), (req, res) => {
+  let sql = "INSERT INTO customer VALUES (null, ?, ?, ?, ?, ?)";
+  let image = "/image/" + req.file.filename;
+  let name = req.body.name;
+  let birthday = req.body.birthday;
+  let gender = req.body.gender;
+  let job = req.body.job;
+  let params = [image, name, birthday, gender, job];
+  connection.query(sql, params, (err, rows, fields) => {
+    // 새로운 고객 정보를 클라이언트에게 다시 전송
+    connection.query("SELECT * FROM customer", (err, rows, fields) => {
+      res.send(rows);
+    });
   });
 });
 
